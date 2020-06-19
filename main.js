@@ -7,38 +7,53 @@ window.onresize = () => {
   xxx();
 };
 
-let painting = false;
+let using = false;
 let lastPoint = {
   x: undefined,
   y: undefined,
 };
+let eraserEnabled = false;
+eraser.onclick = () => {
+  eraserEnabled = !eraserEnabled;
+};
 
 yyy.onmousedown = (a) => {
-  painting = true;
   let x = a.clientX;
   let y = a.clientY;
   // 相对于视口的位置
-  lastPoint = {
-    x: x,
-    y: y,
-  };
-};
-yyy.onmousemove = (a) => {
-  if (painting) {
-    let x = a.clientX;
-    let y = a.clientY;
-    // 相对于视口的位置
-    let newPoint = {
+  if (eraserEnabled) {
+    using = true;
+    ctx.clearRect(x - 5, y - 5, 10, 10);
+  } else {
+    using = true;
+    lastPoint = {
       x: x,
       y: y,
     };
-    drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
-    lastPoint = newPoint;
+  }
+};
+yyy.onmousemove = (a) => {
+  let x = a.clientX;
+  let y = a.clientY;
+  // 相对于视口的位置
+  if (eraserEnabled) {
+    if (using) {
+      ctx.clearRect(x - 5, y - 5, 10, 10);
+    }
   } else {
+    if (using) {
+      let newPoint = {
+        x: x,
+        y: y,
+      };
+      drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+      lastPoint = newPoint;
+    } else {
+    }
   }
 };
 yyy.onmouseup = (a) => {
-  painting = false;
+  using = false;
 };
 
 function drawCircle(x, y, radius) {
