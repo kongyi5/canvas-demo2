@@ -2,7 +2,7 @@ let yyy = document.getElementById("xxx");
 let ctx = yyy.getContext("2d");
 
 autoSetCanvasSize(yyy);
-listenToMouse(yyy);
+listenToUser(yyy);
 
 let eraserEnabled = false;
 eraser.onclick = () => {
@@ -44,45 +44,86 @@ function autoSetCanvasSize(canvas) {
   }
 }
 
-function listenToMouse(canvas) {
+function listenToUser(canvas) {
   let using = false;
   let lastPoint = {
     x: undefined,
     y: undefined,
   };
-  canvas.onmousedown = (a) => {
-    let x = a.clientX;
-    let y = a.clientY;
-    // 相对于视口的位置
-    using = true;
-    if (eraserEnabled) {
-      ctx.clearRect(x - 5, y - 5, 10, 10);
-    } else {
-      lastPoint = {
-        x: x,
-        y: y,
-      };
-    }
-  };
-  canvas.onmousemove = (a) => {
-    let x = a.clientX;
-    let y = a.clientY;
-    // 相对于视口的位置
-    if (!using) {
-      return;
-    }
-    if (eraserEnabled) {
-      ctx.clearRect(x - 5, y - 5, 10, 10);
-    } else {
-      let newPoint = {
-        x: x,
-        y: y,
-      };
-      drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
-      lastPoint = newPoint;
-    }
-  };
-  canvas.onmouseup = (a) => {
-    using = false;
-  };
+  // 特性检测
+  if (document.body.ontouchstart !== undefined) {
+    // 触屏设备
+    canvas.ontouchstart = (a) => {
+      let x = a.touches[0].clientX;
+      let y = a.touches[0].clientY;
+      // 相对于视口的位置
+      using = true;
+      if (eraserEnabled) {
+        ctx.clearRect(x - 5, y - 5, 10, 10);
+      } else {
+        lastPoint = {
+          x: x,
+          y: y,
+        };
+      }
+    };
+    canvas.ontouchmove = (a) => {
+      let x = a.touches[0].clientX;
+      let y = a.touches[0].clientY;
+      // 相对于视口的位置
+      if (!using) {
+        return;
+      }
+      if (eraserEnabled) {
+        ctx.clearRect(x - 5, y - 5, 10, 10);
+      } else {
+        let newPoint = {
+          x: x,
+          y: y,
+        };
+        drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+        lastPoint = newPoint;
+      }
+    };
+    canvas.ontouchend = () => {
+      using = false;
+    };
+  } else {
+    // 非触屏设备
+    canvas.onmousedown = (a) => {
+      let x = a.clientX;
+      let y = a.clientY;
+      // 相对于视口的位置
+      using = true;
+      if (eraserEnabled) {
+        ctx.clearRect(x - 5, y - 5, 10, 10);
+      } else {
+        lastPoint = {
+          x: x,
+          y: y,
+        };
+      }
+    };
+    canvas.onmousemove = (a) => {
+      let x = a.clientX;
+      let y = a.clientY;
+      // 相对于视口的位置
+      if (!using) {
+        return;
+      }
+      if (eraserEnabled) {
+        ctx.clearRect(x - 5, y - 5, 10, 10);
+      } else {
+        let newPoint = {
+          x: x,
+          y: y,
+        };
+        drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+        lastPoint = newPoint;
+      }
+    };
+    canvas.onmouseup = (a) => {
+      using = false;
+    };
+  }
 }
