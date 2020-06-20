@@ -1,5 +1,6 @@
 let yyy = document.getElementById("xxx");
 let ctx = yyy.getContext("2d");
+let lineWidth = 3;
 
 autoSetCanvasSize(yyy);
 listenToUser(yyy);
@@ -9,11 +10,28 @@ pen.onclick = () => {
   eraserEnabled = false;
   pen.classList.add("active");
   eraser.classList.remove("active");
+  clear.classList.remove("active");
 };
 eraser.onclick = () => {
   eraserEnabled = true;
   eraser.classList.add("active");
   pen.classList.remove("active");
+  clear.classList.remove("active");
+};
+clear.onclick = () => {
+  clear.classList.add("active");
+  eraser.classList.remove("active");
+  pen.classList.remove("active");
+  ctx.clearRect(0, 0, yyy.width, yyy.height);
+};
+download.onclick = () => {
+  let url = yyy.toDataURL("image/png");
+  let a = document.createElement("a");
+  document.body.appendChild(a);
+  a.href = url;
+  a.download = "我的画";
+  a.target = "_blank";
+  a.click();
 };
 
 black.onclick = () => {
@@ -45,6 +63,13 @@ blue.onclick = () => {
   green.classList.remove("active");
 };
 
+thin.onclick = () => {
+  lineWidth = 3;
+};
+thick.onclick = () => {
+  lineWidth = 6;
+};
+
 /** 函数库 **/
 function drawCircle(x, y, radius) {
   ctx.beginPath();
@@ -54,7 +79,7 @@ function drawCircle(x, y, radius) {
 
 function drawLine(x1, y1, x2, y2) {
   ctx.beginPath();
-  ctx.lineWidth = 5;
+  ctx.lineWidth = lineWidth;
   ctx.moveTo(x1, y1); // 起点
   ctx.lineTo(x2, y2); // 终点
   ctx.stroke();
