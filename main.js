@@ -1,61 +1,19 @@
 let yyy = document.getElementById("xxx");
 let ctx = yyy.getContext("2d");
 
-xxx();
+autoSetCanvasSize(yyy);
+listenToMouse(yyy);
 
-window.onresize = () => {
-  xxx();
-};
-
-let using = false;
-let lastPoint = {
-  x: undefined,
-  y: undefined,
-};
 let eraserEnabled = false;
 eraser.onclick = () => {
-  eraserEnabled = !eraserEnabled;
+  eraserEnabled = true;
+  action.className = "action x";
 };
-
-yyy.onmousedown = (a) => {
-  let x = a.clientX;
-  let y = a.clientY;
-  // 相对于视口的位置
-  if (eraserEnabled) {
-    using = true;
-    ctx.clearRect(x - 5, y - 5, 10, 10);
-  } else {
-    using = true;
-    lastPoint = {
-      x: x,
-      y: y,
-    };
-  }
+brush.onclick = () => {
+  eraserEnabled = false;
+  action.className = "action";
 };
-yyy.onmousemove = (a) => {
-  let x = a.clientX;
-  let y = a.clientY;
-  // 相对于视口的位置
-  if (eraserEnabled) {
-    if (using) {
-      ctx.clearRect(x - 5, y - 5, 10, 10);
-    }
-  } else {
-    if (using) {
-      let newPoint = {
-        x: x,
-        y: y,
-      };
-      drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
-      lastPoint = newPoint;
-    } else {
-    }
-  }
-};
-yyy.onmouseup = (a) => {
-  using = false;
-};
-
+/** 函数库 **/
 function drawCircle(x, y, radius) {
   ctx.beginPath();
   ctx.strokeStyle = "black";
@@ -72,9 +30,59 @@ function drawLine(x1, y1, x2, y2) {
   ctx.stroke();
   ctx.closePath();
 }
-function xxx() {
-  let pageWidth = document.documentElement.clientWidth;
-  let pageHeight = document.documentElement.clientHeight;
-  yyy.width = pageWidth;
-  yyy.height = pageHeight;
+
+function autoSetCanvasSize(canvas) {
+  setCanvasSize();
+  window.onresize = () => {
+    setCanvasSize();
+  };
+  function setCanvasSize() {
+    let pageWidth = document.documentElement.clientWidth;
+    let pageHeight = document.documentElement.clientHeight;
+    canvas.width = pageWidth;
+    canvas.height = pageHeight;
+  }
+}
+
+function listenToMouse(canvas) {
+  let using = false;
+  let lastPoint = {
+    x: undefined,
+    y: undefined,
+  };
+  canvas.onmousedown = (a) => {
+    let x = a.clientX;
+    let y = a.clientY;
+    // 相对于视口的位置
+    using = true;
+    if (eraserEnabled) {
+      ctx.clearRect(x - 5, y - 5, 10, 10);
+    } else {
+      lastPoint = {
+        x: x,
+        y: y,
+      };
+    }
+  };
+  canvas.onmousemove = (a) => {
+    let x = a.clientX;
+    let y = a.clientY;
+    // 相对于视口的位置
+    if (!using) {
+      return;
+    }
+    if (eraserEnabled) {
+      ctx.clearRect(x - 5, y - 5, 10, 10);
+    } else {
+      let newPoint = {
+        x: x,
+        y: y,
+      };
+      drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+      lastPoint = newPoint;
+    }
+  };
+  canvas.onmouseup = (a) => {
+    using = false;
+  };
 }

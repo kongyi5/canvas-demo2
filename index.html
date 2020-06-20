@@ -11,16 +11,28 @@
       body {
         margin: 0;
       }
-      #eraser {
+      .action {
         position: fixed;
         left: 0;
         bottom: 0;
+      }
+      .action > #brush {
+        display: none;
+      }
+      .action.x > #brush {
+        display: block;
+      }
+      .action.x > #eraser {
+        display: none;
       }
     </style>
   </head>
   <body>
     <canvas id="xxx"></canvas>
-    <button id="eraser">橡皮檫</button>
+    <div id="action" class="action">
+      <button id="eraser">橡皮檫</button>
+      <button id="brush">画笔</button>
+    </div>
     <script src="main.js"></script>
   </body>
 </html>
