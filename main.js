@@ -5,25 +5,55 @@ autoSetCanvasSize(yyy);
 listenToUser(yyy);
 
 let eraserEnabled = false;
+pen.onclick = () => {
+  eraserEnabled = false;
+  pen.classList.add("active");
+  eraser.classList.remove("active");
+};
 eraser.onclick = () => {
   eraserEnabled = true;
-  action.className = "action x";
+  eraser.classList.add("active");
+  pen.classList.remove("active");
 };
-brush.onclick = () => {
-  eraserEnabled = false;
-  action.className = "action";
+
+black.onclick = () => {
+  ctx.strokeStyle = "black";
+  black.classList.add("active");
+  red.classList.remove("active");
+  green.classList.remove("active");
+  blue.classList.remove("active");
 };
+red.onclick = () => {
+  ctx.strokeStyle = "red";
+  red.classList.add("active");
+  black.classList.remove("active");
+  green.classList.remove("active");
+  blue.classList.remove("active");
+};
+green.onclick = () => {
+  ctx.strokeStyle = "green";
+  green.classList.add("active");
+  black.classList.remove("active");
+  red.classList.remove("active");
+  blue.classList.remove("active");
+};
+blue.onclick = () => {
+  ctx.strokeStyle = "blue";
+  blue.classList.add("active");
+  black.classList.remove("active");
+  red.classList.remove("active");
+  green.classList.remove("active");
+};
+
 /** 函数库 **/
 function drawCircle(x, y, radius) {
   ctx.beginPath();
-  ctx.strokeStyle = "black";
   ctx.arc(x, y, radius, 0, Math.PI * 2);
   ctx.fill();
 }
 
 function drawLine(x1, y1, x2, y2) {
   ctx.beginPath();
-  ctx.strokeStyle = "black";
   ctx.lineWidth = 5;
   ctx.moveTo(x1, y1); // 起点
   ctx.lineTo(x2, y2); // 终点
