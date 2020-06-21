@@ -1,11 +1,11 @@
-let yyy = document.getElementById("xxx");
-let ctx = yyy.getContext("2d");
-let lineWidth = 3;
+var yyy = document.getElementById("xxx");
+var ctx = yyy.getContext("2d");
+var lineWidth = 3;
 
 autoSetCanvasSize(yyy);
 listenToUser(yyy);
 
-let eraserEnabled = false;
+var eraserEnabled = false;
 pen.onclick = () => {
   eraserEnabled = false;
   pen.classList.add("active");
@@ -25,8 +25,8 @@ clear.onclick = () => {
   ctx.clearRect(0, 0, yyy.width, yyy.height);
 };
 download.onclick = () => {
-  let url = yyy.toDataURL("image/png");
-  let a = document.createElement("a");
+  var url = yyy.toDataURL("image/png");
+  var a = document.createElement("a");
   document.body.appendChild(a);
   a.href = url;
   a.download = "我的画";
@@ -92,16 +92,16 @@ function autoSetCanvasSize(canvas) {
     setCanvasSize();
   };
   function setCanvasSize() {
-    let pageWidth = document.documentElement.clientWidth;
-    let pageHeight = document.documentElement.clientHeight;
+    var pageWidth = document.documentElement.clientWidth;
+    var pageHeight = document.documentElement.clientHeight;
     canvas.width = pageWidth;
     canvas.height = pageHeight;
   }
 }
 
 function listenToUser(canvas) {
-  let using = false;
-  let lastPoint = {
+  var using = false;
+  var lastPoint = {
     x: undefined,
     y: undefined,
   };
@@ -109,8 +109,8 @@ function listenToUser(canvas) {
   if (document.body.ontouchstart !== undefined) {
     // 触屏设备
     canvas.ontouchstart = (a) => {
-      let x = a.touches[0].clientX;
-      let y = a.touches[0].clientY;
+      var x = a.touches[0].clientX;
+      var y = a.touches[0].clientY;
       // 相对于视口的位置
       using = true;
       if (eraserEnabled) {
@@ -123,8 +123,8 @@ function listenToUser(canvas) {
       }
     };
     canvas.ontouchmove = (a) => {
-      let x = a.touches[0].clientX;
-      let y = a.touches[0].clientY;
+      var x = a.touches[0].clientX;
+      var y = a.touches[0].clientY;
       // 相对于视口的位置
       if (!using) {
         return;
@@ -132,7 +132,7 @@ function listenToUser(canvas) {
       if (eraserEnabled) {
         ctx.clearRect(x - 5, y - 5, 10, 10);
       } else {
-        let newPoint = {
+        var newPoint = {
           x: x,
           y: y,
         };
@@ -146,8 +146,8 @@ function listenToUser(canvas) {
   } else {
     // 非触屏设备
     canvas.onmousedown = (a) => {
-      let x = a.clientX;
-      let y = a.clientY;
+      var x = a.clientX;
+      var y = a.clientY;
       // 相对于视口的位置
       using = true;
       if (eraserEnabled) {
@@ -160,8 +160,8 @@ function listenToUser(canvas) {
       }
     };
     canvas.onmousemove = (a) => {
-      let x = a.clientX;
-      let y = a.clientY;
+      var x = a.clientX;
+      var y = a.clientY;
       // 相对于视口的位置
       if (!using) {
         return;
@@ -169,7 +169,7 @@ function listenToUser(canvas) {
       if (eraserEnabled) {
         ctx.clearRect(x - 5, y - 5, 10, 10);
       } else {
-        let newPoint = {
+        var newPoint = {
           x: x,
           y: y,
         };
